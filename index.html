@@ -9,40 +9,84 @@
   <style>
     body {
       margin: 0;
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 14px;
-      line-height: 1.5;
       background-color: #0e0e0e;
       overflow: hidden;
+      transition: background-color 0.8s ease;
     }
 
     .center {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      position: relative;
+      width: 100vw;
       height: 100vh;
-      gap: 40px;
     }
 
-    .img-wrap {
-      display: block;
+    .mask-wrap {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      will-change: transform;
+      cursor: grab;
+      touch-action: none;
     }
 
-    img {
-      display: block;
+    .mask-wrap.dragging {
+      cursor: grabbing;
+    }
+
+    .mask-img {
       opacity: 0;
       transform: translateY(20px);
-      transition: transform 0.3s ease;
       animation: fadeUp 1s ease forwards;
-      will-change: transform;
+      transition: transform 0.3s ease, background-color 0.8s ease;
+      background-color: #ffffff;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      pointer-events: none;
+    }
+
+    #wrap-title {
+      margin-top: -120px;
+    }
+
+    #wrap-date {
+      margin-top: 120px;
+    }
+
+    #title {
+      width: 1000px;
+      height: 320px;
+      animation-delay: 0s;
+
+      -webkit-mask-image: url("title.png");
+      -webkit-mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      -webkit-mask-size: contain;
+
+      mask-image: url("title.png");
+      mask-repeat: no-repeat;
+      mask-position: center;
+      mask-size: contain;
     }
 
     #date {
+      width: 400px;
+      height: 100px;
       animation-delay: 0.6s;
+
+      -webkit-mask-image: url("date.png");
+      -webkit-mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      -webkit-mask-size: contain;
+
+      mask-image: url("date.png");
+      mask-repeat: no-repeat;
+      mask-position: center;
+      mask-size: contain;
     }
 
-    .img-wrap:hover img {
+    .mask-wrap:hover .mask-img {
       transform: scale(1.05) rotate(3deg);
     }
 
@@ -52,60 +96,153 @@
         transform: translateY(0);
       }
     }
-     /* ---------- MOBILE ---------- */
-     @media (max-width: 768px) {
-      .center {
-        gap: 40px;
-        padding: 30px 20px;
+
+    @media (max-width: 768px) {
+      #wrap-title {
+        margin-top: -80px;
+      }
+
+      #wrap-date {
+        margin-top: 70px;
       }
 
       #title {
         width: 90vw;
+        height: 30vw;
+        max-height: 240px;
       }
 
       #date {
         width: 70vw;
+        height: 18vw;
+        max-height: 100px;
       }
     }
 
-    /* ---------- VERY SMALL SCREENS ---------- */
     @media (max-width: 480px) {
-      .center {
-        gap: 30px;
-      }
-
       #title {
-        width: 90vw;
+        width: 92vw;
+        height: 32vw;
       }
 
       #date {
-        width: 75vw;
+        width: 78vw;
+        height: 20vw;
       }
     }
   </style>
 </head>
 <body>
   <div class="center">
-    <div class="img-wrap" id="wrap-title">
-      <img src="title.png" id="title" width="500" alt="Tender Hell title" />
+    <div class="mask-wrap" id="wrap-title">
+      <div class="mask-img" id="title" aria-label="Tender Hell title"></div>
     </div>
 
-    <div class="img-wrap" id="wrap-date">
-      <img src="date.png" id="date" width="400" alt="Exhibition date" />
+    <div class="mask-wrap" id="wrap-date">
+      <div class="mask-img" id="date" aria-label="Exhibition date"></div>
     </div>
   </div>
 
   <script>
-    const wraps = document.querySelectorAll('.img-wrap');
+    const wraps = document.querySelectorAll(".mask-wrap");
+    const maskImgs = document.querySelectorAll(".mask-img");
 
-    document.addEventListener('mousemove', (e) => {
+    // subtle cursor movement
+    document.addEventListener("mousemove", (e) => {
       const x = (e.clientX / window.innerWidth - 0.5) * 20;
       const y = (e.clientY / window.innerHeight - 0.5) * 20;
 
       wraps.forEach((wrap, index) => {
+        if (wrap.dataset.dragging === "true") return;
+
         const speed = index === 0 ? 1 : 0.6;
-        wrap.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+        const baseX = parseFloat(wrap.dataset.baseX || 0);
+        const baseY = parseFloat(wrap.dataset.baseY || 0);
+
+        wrap.style.transform = `translate(calc(-50% + ${baseX + x * speed}px), calc(-50% + ${baseY + y * speed}px))`;
       });
+    });
+
+    // color cycling
+    const colorSets = [
+      { bg: "#001a00", fg: "#7CFC98" },
+      { bg: "#7CFC98", fg: "#001a00" },
+      { bg: "#ff0066", fg: "#ffb6d9" },
+      { bg: "#ffb6d9", fg: "#ff0066" }
+    ];
+
+    let i = 0;
+
+    setInterval(() => {
+      const current = colorSets[i];
+      document.body.style.backgroundColor = current.bg;
+
+      maskImgs.forEach((el) => {
+        el.style.backgroundColor = current.fg;
+      });
+
+      i = (i + 1) % colorSets.length;
+    }, 5000);
+
+    // draggable
+    wraps.forEach((wrap) => {
+      let startX = 0;
+      let startY = 0;
+      let initialX = 0;
+      let initialY = 0;
+
+      const startDrag = (clientX, clientY) => {
+        wrap.classList.add("dragging");
+        wrap.dataset.dragging = "true";
+
+        startX = clientX;
+        startY = clientY;
+        initialX = parseFloat(wrap.dataset.baseX || 0);
+        initialY = parseFloat(wrap.dataset.baseY || 0);
+      };
+
+      const doDrag = (clientX, clientY) => {
+        if (wrap.dataset.dragging !== "true") return;
+
+        const dx = clientX - startX;
+        const dy = clientY - startY;
+
+        const newX = initialX + dx;
+        const newY = initialY + dy;
+
+        wrap.dataset.baseX = newX;
+        wrap.dataset.baseY = newY;
+
+        wrap.style.transform = `translate(calc(-50% + ${newX}px), calc(-50% + ${newY}px))`;
+      };
+
+      const endDrag = () => {
+        wrap.classList.remove("dragging");
+        wrap.dataset.dragging = "false";
+      };
+
+      wrap.addEventListener("mousedown", (e) => {
+        startDrag(e.clientX, e.clientY);
+      });
+
+      window.addEventListener("mousemove", (e) => {
+        doDrag(e.clientX, e.clientY);
+      });
+
+      window.addEventListener("mouseup", endDrag);
+
+      wrap.addEventListener("touchstart", (e) => {
+        const touch = e.touches[0];
+        startDrag(touch.clientX, touch.clientY);
+      }, { passive: true });
+
+      window.addEventListener("touchmove", (e) => {
+        const touch = e.touches[0];
+        if (!touch) return;
+        doDrag(touch.clientX, touch.clientY);
+      }, { passive: true });
+
+      window.addEventListener("touchend", endDrag);
     });
   </script>
 </body>
