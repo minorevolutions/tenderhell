@@ -1,35 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>tender hell</title>
-    <style>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tender hell</title>
+
+  <style>
     body {
-        font-family: 'Courier New', Courier, monospace;
-        font-size: 14px;
-        line-height: 1.5px;
-        background-color: black;
+      margin: 0;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      background-color: #0e0e0e;
+      overflow: hidden;
     }
+
     .center {
-        display: flex;
-        flex-direction: column; 
-        justify-content: center;
-        align-items: center;
-        height: 100vh;  
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      gap: 40px;
     }
-    
+
+    .img-wrap {
+      display: block;
+    }
+
     img {
-    display: block;
-    margin-bottom: 100px;
+      display: block;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+      animation: fadeUp 1s ease forwards;
+      will-change: transform;
     }
-    </style>
+
+    #date {
+      animation-delay: 0.6s;
+    }
+
+    .img-wrap:hover img {
+      transform: scale(1.05) rotate(3deg);
+    }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+     /* ---------- MOBILE ---------- */
+     @media (max-width: 768px) {
+      .center {
+        gap: 40px;
+        padding: 30px 20px;
+      }
+
+      #title {
+        width: 90vw;
+      }
+
+      #date {
+        width: 70vw;
+      }
+    }
+
+    /* ---------- VERY SMALL SCREENS ---------- */
+    @media (max-width: 480px) {
+      .center {
+        gap: 30px;
+      }
+
+      #title {
+        width: 90vw;
+      }
+
+      #date {
+        width: 75vw;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="center">
-       <div><img src="/title.png" width="500px"></div> 
-         <div><img src="/date.png" width="400px"></div>
+  <div class="center">
+    <div class="img-wrap" id="wrap-title">
+      <img src="title.png" id="title" width="500" alt="Tender Hell title" />
     </div>
+
+    <div class="img-wrap" id="wrap-date">
+      <img src="date.png" id="date" width="400" alt="Exhibition date" />
+    </div>
+  </div>
+
+  <script>
+    const wraps = document.querySelectorAll('.img-wrap');
+
+    document.addEventListener('mousemove', (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 20;
+      const y = (e.clientY / window.innerHeight - 0.5) * 20;
+
+      wraps.forEach((wrap, index) => {
+        const speed = index === 0 ? 1 : 0.6;
+        wrap.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+      });
+    });
+  </script>
 </body>
 </html>
