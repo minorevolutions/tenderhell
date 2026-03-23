@@ -11,7 +11,6 @@
       font-family: "Mono Light";
       src: url("ABCGaisyrMonoVariable.ttf") format("truetype");
       font-weight: normal;
-      font-style: normal;
     }
 
     * {
@@ -25,6 +24,10 @@
       font-family: "Mono Light", monospace;
       overflow: hidden;
       transition: background-color 0.8s ease, color 0.8s ease;
+    }
+
+    p {
+        font-size: 35px;
     }
 
     .stage {
@@ -153,7 +156,7 @@
     }
 
     .about-content {
-      max-width: 680px;
+      max-width: 900px;
       width: 100%;
       text-align: center;
       font-size: 16px;
@@ -177,7 +180,11 @@
     }
 
     @media (max-width: 768px) {
-      #title {
+      
+        p {
+        font-size: 20px;
+         }
+        #title {
         width: 90vw;
         height: 31vw;
         max-height: 260px;
@@ -194,8 +201,8 @@
       }
 
       .about-icon {
-        width: 68px;
-        height: 68px;
+        width: 20px;
+        height: 20px;
       }
 
       #about-button {
@@ -216,8 +223,8 @@
       }
 
       .about-icon {
-        width: 60px;
-        height: 60px;
+        width: 20px;
+        height: 20px;
       }
     }
   </style>
