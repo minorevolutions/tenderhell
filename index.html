@@ -7,27 +7,41 @@
   <title>tender hell</title>
 
   <style>
+    @font-face {
+      font-family: "Mono Light";
+      src: url("ABCGaisyrMonoVariable.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       background-color: #0e0e0e;
+      color: #ffffff;
+      font-family: "Mono Light", monospace;
       overflow: hidden;
-      transition: background-color 0.8s ease;
+      transition: background-color 0.8s ease, color 0.8s ease;
     }
 
-    .center {
+    .stage {
       position: relative;
       width: 100vw;
       height: 100vh;
+      overflow: hidden;
     }
 
     .mask-wrap {
       position: absolute;
       left: 50%;
       top: 50%;
-      transform: translate(-50%, -50%);
       will-change: transform;
       cursor: grab;
       touch-action: none;
+      z-index: 2;
     }
 
     .mask-wrap.dragging {
@@ -47,16 +61,16 @@
     }
 
     #wrap-title {
-      margin-top: -120px;
+      z-index: 3;
     }
 
     #wrap-date {
-      margin-top: 120px;
+      z-index: 2;
     }
 
     #title {
-      width: 1000px;
-      height: 320px;
+      width: 750px;
+      height: 260px;
       animation-delay: 0s;
 
       -webkit-mask-image: url("title.png");
@@ -72,7 +86,7 @@
 
     #date {
       width: 400px;
-      height: 100px;
+      height: 110px;
       animation-delay: 0.6s;
 
       -webkit-mask-image: url("date.png");
@@ -90,6 +104,71 @@
       transform: scale(1.05) rotate(3deg);
     }
 
+    #about-button {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 20;
+      cursor: pointer;
+    }
+
+    .about-icon {
+      width: 84px;
+      height: 84px;
+      background-color: #ffffff;
+      transition: transform 0.3s ease, background-color 0.8s ease;
+
+      -webkit-mask-image: url("about.png");
+      -webkit-mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      -webkit-mask-size: contain;
+
+      mask-image: url("about.png");
+      mask-repeat: no-repeat;
+      mask-position: center;
+      mask-size: contain;
+    }
+
+    #about-button:hover .about-icon {
+      transform: scale(1.08);
+    }
+
+    #about-panel {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 15;
+      transition: opacity 0.4s ease, background-color 0.8s ease;
+      background-color: rgba(0, 0, 0, 0.94);
+    }
+
+    #about-panel.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .about-content {
+      max-width: 680px;
+      width: 100%;
+      text-align: center;
+      font-size: 16px;
+      line-height: 1.5;
+      color: inherit;
+    }
+
+    .about-content p {
+      margin: 0 0 1em;
+    }
+
+    .about-content p:last-child {
+      margin-bottom: 0;
+    }
+
     @keyframes fadeUp {
       to {
         opacity: 1;
@@ -98,24 +177,30 @@
     }
 
     @media (max-width: 768px) {
-      #wrap-title {
-        margin-top: -80px;
-      }
-
-      #wrap-date {
-        margin-top: 70px;
-      }
-
       #title {
         width: 90vw;
-        height: 30vw;
-        max-height: 240px;
+        height: 31vw;
+        max-height: 260px;
       }
 
       #date {
-        width: 70vw;
+        width: 68vw;
         height: 18vw;
-        max-height: 100px;
+        max-height: 110px;
+      }
+
+      .about-content {
+        font-size: 14px;
+      }
+
+      .about-icon {
+        width: 68px;
+        height: 68px;
+      }
+
+      #about-button {
+        top: 16px;
+        left: 16px;
       }
     }
 
@@ -126,19 +211,42 @@
       }
 
       #date {
-        width: 78vw;
-        height: 20vw;
+        width: 74vw;
+        height: 19vw;
+      }
+
+      .about-icon {
+        width: 60px;
+        height: 60px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="center">
-    <div class="mask-wrap" id="wrap-title">
+  <div id="about-button" aria-label="Open curatorial statement">
+    <div class="about-icon"></div>
+  </div>
+
+  <div id="about-panel">
+    <div class="about-content">
+      <p>
+        <em>Tender Hell</em> presents the culminating thesis work of the 2026 Yale Graphic Design MFA class.
+        The exhibition aims to showcase the diverse range of individual practices within the cohort, while
+        acknowledging the often fraught relationship design has to labor, power, service, and circulation.
+      </p>
+      <p>
+        In addition to the work presented in the gallery, each participant will also produce materials to be
+        distributed during the show.
+      </p>
+    </div>
+  </div>
+
+  <div class="stage">
+    <div class="mask-wrap" id="wrap-title" data-base-x="0" data-base-y="-120">
       <div class="mask-img" id="title" aria-label="Tender Hell title"></div>
     </div>
 
-    <div class="mask-wrap" id="wrap-date">
+    <div class="mask-wrap" id="wrap-date" data-base-x="0" data-base-y="120">
       <div class="mask-img" id="date" aria-label="Exhibition date"></div>
     </div>
   </div>
@@ -146,55 +254,79 @@
   <script>
     const wraps = document.querySelectorAll(".mask-wrap");
     const maskImgs = document.querySelectorAll(".mask-img");
+    const aboutBtn = document.getElementById("about-button");
+    const aboutPanel = document.getElementById("about-panel");
+    const aboutIcon = document.querySelector(".about-icon");
 
-    // subtle cursor movement
+    const colorSets = [
+      { bg: "#000000", fg: "#FFFFFF" },
+      { bg: "#001a00", fg: "#7CFC98" },
+      { bg: "#7CFC98", fg: "#001a00" },
+      { bg: "#ff0066", fg: "#ffb6d9" },
+      { bg: "#ffb6d9", fg: "#ff0066" }      
+    ];
+
+    let colorIndex = 0;
+
+    function updateWrapPosition(wrap, mouseX = 0, mouseY = 0, speed = 1) {
+      const baseX = parseFloat(wrap.dataset.baseX || 0);
+      const baseY = parseFloat(wrap.dataset.baseY || 0);
+      wrap.style.transform = `translate(calc(-50% + ${baseX + mouseX * speed}px), calc(-50% + ${baseY + mouseY * speed}px))`;
+    }
+
+    function applyColors() {
+      const current = colorSets[colorIndex];
+      document.body.style.backgroundColor = current.bg;
+      document.body.style.color = current.fg;
+      aboutPanel.style.backgroundColor = current.bg;
+      aboutIcon.style.backgroundColor = current.fg;
+
+      maskImgs.forEach((el) => {
+        el.style.backgroundColor = current.fg;
+      });
+    }
+
+    applyColors();
+
+    setInterval(() => {
+      colorIndex = (colorIndex + 1) % colorSets.length;
+      applyColors();
+    }, 5000);
+
+    wraps.forEach((wrap, index) => {
+      const speed = index === 0 ? 1 : 0.6;
+      updateWrapPosition(wrap, 0, 0, speed);
+    });
+
     document.addEventListener("mousemove", (e) => {
       const x = (e.clientX / window.innerWidth - 0.5) * 20;
       const y = (e.clientY / window.innerHeight - 0.5) * 20;
 
       wraps.forEach((wrap, index) => {
         if (wrap.dataset.dragging === "true") return;
-
         const speed = index === 0 ? 1 : 0.6;
-        const baseX = parseFloat(wrap.dataset.baseX || 0);
-        const baseY = parseFloat(wrap.dataset.baseY || 0);
-
-        wrap.style.transform = `translate(calc(-50% + ${baseX + x * speed}px), calc(-50% + ${baseY + y * speed}px))`;
+        updateWrapPosition(wrap, x, y, speed);
       });
     });
 
-    // color cycling
-    const colorSets = [
-      { bg: "#001a00", fg: "#7CFC98" },
-      { bg: "#7CFC98", fg: "#001a00" },
-      { bg: "#ff0066", fg: "#ffb6d9" },
-      { bg: "#ffb6d9", fg: "#ff0066" }
-    ];
+    aboutBtn.addEventListener("click", () => {
+      aboutPanel.classList.add("active");
+    });
 
-    let i = 0;
+    aboutPanel.addEventListener("click", () => {
+      aboutPanel.classList.remove("active");
+    });
 
-    setInterval(() => {
-      const current = colorSets[i];
-      document.body.style.backgroundColor = current.bg;
-
-      maskImgs.forEach((el) => {
-        el.style.backgroundColor = current.fg;
-      });
-
-      i = (i + 1) % colorSets.length;
-    }, 5000);
-
-    // draggable
-    wraps.forEach((wrap) => {
+    wraps.forEach((wrap, index) => {
       let startX = 0;
       let startY = 0;
       let initialX = 0;
       let initialY = 0;
+      const speed = index === 0 ? 1 : 0.6;
 
       const startDrag = (clientX, clientY) => {
         wrap.classList.add("dragging");
         wrap.dataset.dragging = "true";
-
         startX = clientX;
         startY = clientY;
         initialX = parseFloat(wrap.dataset.baseX || 0);
@@ -207,13 +339,10 @@
         const dx = clientX - startX;
         const dy = clientY - startY;
 
-        const newX = initialX + dx;
-        const newY = initialY + dy;
+        wrap.dataset.baseX = initialX + dx;
+        wrap.dataset.baseY = initialY + dy;
 
-        wrap.dataset.baseX = newX;
-        wrap.dataset.baseY = newY;
-
-        wrap.style.transform = `translate(calc(-50% + ${newX}px), calc(-50% + ${newY}px))`;
+        updateWrapPosition(wrap, 0, 0, speed);
       };
 
       const endDrag = () => {
