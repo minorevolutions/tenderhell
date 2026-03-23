@@ -13,9 +13,7 @@
       font-weight: normal;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -27,9 +25,113 @@
     }
 
     p {
-        font-size: 35px;
+      font-size: 20px;
+      line-height: 1.3;
     }
 
+    em {
+      font-style: normal;
+      text-transform: uppercase;
+      letter-spacing: normal;
+    }
+
+    /* ── NAV ── */
+    #nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 18px 40px;
+      z-index: 20;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .nav-icon {
+      width: 40px;
+      height: 40px;
+      background-color: #ffffff;
+      transition: transform 0.3s ease, background-color 0.8s ease;
+
+      -webkit-mask-image: url("about.png");
+      -webkit-mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      -webkit-mask-size: contain;
+
+      mask-image: url("about.png");
+      mask-repeat: no-repeat;
+      mask-position: center;
+      mask-size: contain;
+    }
+
+    .nav-label { display: none; }
+
+    .nav-item:hover .nav-icon {
+      transform: scale(1.12) rotate(6deg);
+    }
+
+    /* ── PANELS ── */
+    .panel {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 15;
+      transition: opacity 0.4s ease, background-color 0.8s ease;
+      background-color: #0e0e0e;
+    }
+
+    .panel.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .panel-content {
+      max-width: 900px;
+      width: 100%;
+      text-align: center;
+      font-size: 16px;
+      line-height: 1.5;
+      color: inherit;
+    }
+
+    .panel-content p {
+      margin: 0 0 1em;
+    }
+
+    .panel-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    .panel-close {
+      position: absolute;
+      top: 20px;
+      right: 28px;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 1;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .panel-close:hover { opacity: 1; }
+
+    /* ── STAGE ── */
     .stage {
       position: relative;
       width: 100vw;
@@ -47,9 +149,7 @@
       z-index: 2;
     }
 
-    .mask-wrap.dragging {
-      cursor: grabbing;
-    }
+    .mask-wrap.dragging { cursor: grabbing; }
 
     .mask-img {
       opacity: 0;
@@ -63,13 +163,8 @@
       pointer-events: none;
     }
 
-    #wrap-title {
-      z-index: 3;
-    }
-
-    #wrap-date {
-      z-index: 2;
-    }
+    #wrap-title { z-index: 3; }
+    #wrap-date  { z-index: 2; }
 
     #title {
       width: 750px;
@@ -107,135 +202,57 @@
       transform: scale(1.05) rotate(3deg);
     }
 
-    #about-button {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      z-index: 20;
-      cursor: pointer;
-    }
-
-    .about-icon {
-      width: 40px;
-      height: 40px;
-      background-color: #ffffff;
-      transition: transform 0.3s ease, background-color 0.8s ease;
-
-      -webkit-mask-image: url("about.png");
-      -webkit-mask-repeat: no-repeat;
-      -webkit-mask-position: center;
-      -webkit-mask-size: contain;
-
-      mask-image: url("about.png");
-      mask-repeat: no-repeat;
-      mask-position: center;
-      mask-size: contain;
-    }
-
-    #about-button:hover .about-icon {
-      transform: scale(1.08);
-    }
-
-    #about-panel {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 24px;
-      opacity: 0;
-      pointer-events: none;
-      z-index: 15;
-      transition: opacity 0.4s ease, background-color 0.8s ease;
-      background-color: rgba(0, 0, 0, 0.94);
-    }
-
-    #about-panel.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .about-content {
-      max-width: 900px;
-      width: 100%;
-      text-align: center;
-      font-size: 16px;
-      line-height: 1.5;
-      color: inherit;
-    }
-
-    .about-content p {
-      margin: 0 0 1em;
-    }
-
-    .about-content p:last-child {
-      margin-bottom: 0;
-    }
-
     @keyframes fadeUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      to { opacity: 1; transform: translateY(0); }
     }
 
+    /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
-      
-        p {
-        font-size: 20px;
-         }
-        #title {
-        width: 90vw;
-        height: 31vw;
-        max-height: 260px;
-      }
+      p { font-size: 20px; }
 
-      #date {
-        width: 68vw;
-        height: 18vw;
-        max-height: 110px;
-      }
+      #title { width: 90vw; height: 31vw; max-height: 260px; }
+      #date  { width: 68vw; height: 18vw; max-height: 110px; }
 
-      .about-content {
-        font-size: 14px;
-      }
-
-      .about-icon {
-        width: 20px;
-        height: 20px;
-      }
-
-      #about-button {
-        top: 16px;
-        left: 16px;
-      }
+      .panel-content { font-size: 14px; }
+      .nav-icon { width: 28px; height: 28px; }
+      .nav-label { font-size: 9px; }
+      #nav { padding: 14px 16px; }
     }
 
     @media (max-width: 480px) {
-      #title {
-        width: 92vw;
-        height: 32vw;
-      }
-
-      #date {
-        width: 74vw;
-        height: 19vw;
-      }
-
-      .about-icon {
-        width: 20px;
-        height: 20px;
-      }
+      #title { width: 92vw; height: 32vw; }
+      #date  { width: 74vw; height: 19vw; }
+      .nav-icon { width: 22px; height: 22px; }
+      .nav-label { display: none; }
     }
   </style>
 </head>
 <body>
-  <div id="about-button" aria-label="Open curatorial statement">
-    <div class="about-icon"></div>
-  </div>
 
-  <div id="about-panel">
-    <div class="about-content">
+  <!-- NAV -->
+  <nav id="nav">
+    <div class="nav-item" data-panel="panel-about" aria-label="About">
+      <div class="nav-icon"></div>
+      <span class="nav-label">About</span>
+    </div>
+    <div class="nav-item" data-panel="panel-artists" aria-label="Artists">
+      <div class="nav-icon"></div>
+      <span class="nav-label">Artists</span>
+    </div>
+    <div class="nav-item" data-panel="panel-locations" aria-label="Locations">
+      <div class="nav-icon"></div>
+      <span class="nav-label">Locations</span>
+    </div>
+    <div class="nav-item" data-panel="panel-colophon" aria-label="Colophon">
+      <div class="nav-icon"></div>
+      <span class="nav-label">Colophon</span>
+    </div>
+  </nav>
+
+  <!-- ABOUT PANEL -->
+  <div class="panel" id="panel-about">
+    <span class="panel-close">✕ close</span>
+    <div class="panel-content">
       <p>
         <em>Tender Hell</em> presents the culminating thesis work of the 2026 Yale Graphic Design MFA class.
         The exhibition aims to showcase the diverse range of individual practices within the cohort, while
@@ -248,137 +265,127 @@
     </div>
   </div>
 
+  <!-- ARTISTS PANEL -->
+  <div class="panel" id="panel-artists">
+    <span class="panel-close">✕ close</span>
+    <div class="panel-content">
+        <p>Izza Alyssa</p>
+        <p>Gabriella N. Baez</p>
+        <p>Denzel Boyd</p>
+        <p>Rebecca Cheng</p>
+        <p>Ellen Fabini</p>
+        <p>Amy Fang</p>
+        <p>Camille J. Gwise</p>
+        <p>Hana Jelovšek</p>
+        <p>David Wonsik Jung</p>
+        <p>Hasti Kasraei</p>
+        <p>Heejae Kim</p>
+        <p>Cierra Peters</p>
+        <p>Michael Stevens</p>
+        <p>Priscilla Young</p>
+        <p>Xiwen Zhang</p>
+        <p>Hongting Zhu</p>
+    </div>
+  </div>
+
+  <!-- LOCATIONS PANEL -->
+  <div class="panel" id="panel-locations">
+    <span class="panel-close">✕ close</span>
+    <div class="panel-content">
+      <p>
+        <em>Green Hall Gallery</em><br>
+        Yale School of Art<br>
+        1156 Chapel Street, New Haven CT 06511<br>
+        April 9 — 17, 2026<br>
+    </p><br><br>
+        <p><em>ENTER ENTER</em><br>
+            Nieuwe Herengracht 11A<br>
+            1011RK Amsterdam<br>
+            Dates Forthcoming
+        </p>
+    </div>
+  </div>
+
+  <!-- COLOPHON PANEL -->
+  <div class="panel" id="panel-colophon">
+    <span class="panel-close">✕ close</span>
+    <div class="panel-content">
+      <p><em>Curatorial Team</em><br>
+        Christoper Cole, Ellen Fabini, Amy Fang.
+      </p><br>
+        <p><em>Identity Team</em><br>
+        Denzel Boyd, Hasti Kasraei, Heejae Kim, Xiwen Zhang.
+      </p><br>
+      <p>
+        <em>Exhibition Design Team</em><br>
+        Gabriella N. Baez, Camille J. Gwise, Hana Jelovšek.
+      </p><br>
+      <p>
+        <em>Programming Team</em><br>
+        Izza Alyssa, Cierra M. Peters, Priscilla Young, Hongting Zhu.
+      </p>
+    </div>
+  </div>
+
+  <!-- STAGE -->
   <div class="stage">
     <div class="mask-wrap" id="wrap-title" data-base-x="0" data-base-y="-120">
       <div class="mask-img" id="title" aria-label="Tender Hell title"></div>
     </div>
-
     <div class="mask-wrap" id="wrap-date" data-base-x="0" data-base-y="120">
       <div class="mask-img" id="date" aria-label="Exhibition date"></div>
     </div>
   </div>
 
   <script>
-    const wraps = document.querySelectorAll(".mask-wrap");
-    const maskImgs = document.querySelectorAll(".mask-img");
-    const aboutBtn = document.getElementById("about-button");
-    const aboutPanel = document.getElementById("about-panel");
-    const aboutIcon = document.querySelector(".about-icon");
+    const wraps     = document.querySelectorAll(".mask-wrap");
+    const maskImgs  = document.querySelectorAll(".mask-img");
+    const navItems  = document.querySelectorAll(".nav-item");
+    const panels    = document.querySelectorAll(".panel");
+    const navIcons  = document.querySelectorAll(".nav-icon");
+    const navLabels = document.querySelectorAll(".nav-label");
 
-    const colorSets = [
-      { bg: "#000000", fg: "#FFFFFF" },
-      { bg: "#001a00", fg: "#7CFC98" },
-      { bg: "#7CFC98", fg: "#001a00" },
-      { bg: "#ff0066", fg: "#ffb6d9" },
-      { bg: "#ffb6d9", fg: "#ff0066" }      
-    ];
+    // ── COLOR CYCLING ──
 
-    let colorIndex = 0;
 
+    // ── NAV / PANEL LOGIC ──
+    function closeAll() {
+      panels.forEach(p => p.classList.remove("active"));
+    }
+
+    navItems.forEach(item => {
+      item.addEventListener("click", () => {
+        const target  = document.getElementById(item.dataset.panel);
+        const isOpen  = target.classList.contains("active");
+        closeAll();
+        if (!isOpen) target.classList.add("active");
+      });
+    });
+
+    panels.forEach(panel => {
+      panel.addEventListener("click", e => { if (e.target === panel) closeAll(); });
+      panel.querySelector(".panel-close").addEventListener("click", e => {
+        e.stopPropagation();
+        closeAll();
+      });
+    });
+
+    // ── PARALLAX ──
     function updateWrapPosition(wrap, mouseX = 0, mouseY = 0, speed = 1) {
       const baseX = parseFloat(wrap.dataset.baseX || 0);
       const baseY = parseFloat(wrap.dataset.baseY || 0);
       wrap.style.transform = `translate(calc(-50% + ${baseX + mouseX * speed}px), calc(-50% + ${baseY + mouseY * speed}px))`;
     }
 
-    function applyColors() {
-      const current = colorSets[colorIndex];
-      document.body.style.backgroundColor = current.bg;
-      document.body.style.color = current.fg;
-      aboutPanel.style.backgroundColor = current.bg;
-      aboutIcon.style.backgroundColor = current.fg;
+    wraps.forEach((wrap, i) => updateWrapPosition(wrap, 0, 0, i === 0 ? 1 : 0.6));
 
-      maskImgs.forEach((el) => {
-        el.style.backgroundColor = current.fg;
-      });
-    }
-
-    applyColors();
-
-    setInterval(() => {
-      colorIndex = (colorIndex + 1) % colorSets.length;
-      applyColors();
-    }, 5000);
-
-    wraps.forEach((wrap, index) => {
-      const speed = index === 0 ? 1 : 0.6;
-      updateWrapPosition(wrap, 0, 0, speed);
-    });
-
-    document.addEventListener("mousemove", (e) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 20;
+    document.addEventListener("mousemove", e => {
+      const x = (e.clientX / window.innerWidth  - 0.5) * 20;
       const y = (e.clientY / window.innerHeight - 0.5) * 20;
-
-      wraps.forEach((wrap, index) => {
+      wraps.forEach((wrap, i) => {
         if (wrap.dataset.dragging === "true") return;
-        const speed = index === 0 ? 1 : 0.6;
-        updateWrapPosition(wrap, x, y, speed);
+        updateWrapPosition(wrap, x, y, i === 0 ? 1 : 0.6);
       });
-    });
-
-    aboutBtn.addEventListener("click", () => {
-      aboutPanel.classList.add("active");
-    });
-
-    aboutPanel.addEventListener("click", () => {
-      aboutPanel.classList.remove("active");
-    });
-
-    wraps.forEach((wrap, index) => {
-      let startX = 0;
-      let startY = 0;
-      let initialX = 0;
-      let initialY = 0;
-      const speed = index === 0 ? 1 : 0.6;
-
-      const startDrag = (clientX, clientY) => {
-        wrap.classList.add("dragging");
-        wrap.dataset.dragging = "true";
-        startX = clientX;
-        startY = clientY;
-        initialX = parseFloat(wrap.dataset.baseX || 0);
-        initialY = parseFloat(wrap.dataset.baseY || 0);
-      };
-
-      const doDrag = (clientX, clientY) => {
-        if (wrap.dataset.dragging !== "true") return;
-
-        const dx = clientX - startX;
-        const dy = clientY - startY;
-
-        wrap.dataset.baseX = initialX + dx;
-        wrap.dataset.baseY = initialY + dy;
-
-        updateWrapPosition(wrap, 0, 0, speed);
-      };
-
-      const endDrag = () => {
-        wrap.classList.remove("dragging");
-        wrap.dataset.dragging = "false";
-      };
-
-      wrap.addEventListener("mousedown", (e) => {
-        startDrag(e.clientX, e.clientY);
-      });
-
-      window.addEventListener("mousemove", (e) => {
-        doDrag(e.clientX, e.clientY);
-      });
-
-      window.addEventListener("mouseup", endDrag);
-
-      wrap.addEventListener("touchstart", (e) => {
-        const touch = e.touches[0];
-        startDrag(touch.clientX, touch.clientY);
-      }, { passive: true });
-
-      window.addEventListener("touchmove", (e) => {
-        const touch = e.touches[0];
-        if (!touch) return;
-        doDrag(touch.clientX, touch.clientY);
-      }, { passive: true });
-
-      window.addEventListener("touchend", endDrag);
     });
   </script>
 </body>
