@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -13,7 +14,9 @@
       font-weight: normal;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -74,7 +77,9 @@
       mask-size: contain;
     }
 
-    .nav-label { display: none; }
+    .nav-label {
+      display: none;
+    }
 
     .nav-item:hover .nav-icon {
       transform: scale(1.12) rotate(6deg);
@@ -130,15 +135,39 @@
       transition: opacity 0.2s;
     }
 
-    .panel-close:hover { opacity: 1; }
+    .panel-close:hover {
+      opacity: 1;
+    }
 
     /* ── STAGE ── */
+    /* Container for the icons */
     .stage {
       position: relative;
       width: 100vw;
       height: 100vh;
       overflow: hidden;
     }
+
+    /* Individual About.png icons */
+    .letter-unit {
+  position: absolute;
+  /* Size will be set dynamically in JS to match the scale */
+  background-color: #ffffff;
+  cursor: grab;
+  touch-action: none;
+  z-index: 10;
+  -webkit-mask-image: url("about.png");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-image: url("about.png");
+  mask-size: contain;
+  mask-repeat: no-repeat;
+}
+
+    .letter-unit:active {
+      cursor: grabbing;
+    }
+
 
     .mask-wrap {
       position: absolute;
@@ -150,7 +179,9 @@
       z-index: 2;
     }
 
-    .mask-wrap.dragging { cursor: grabbing; }
+    .mask-wrap.dragging {
+      cursor: grabbing;
+    }
 
     .mask-img {
       opacity: 0;
@@ -164,8 +195,13 @@
       pointer-events: none;
     }
 
-    #wrap-title { z-index: 3; }
-    #wrap-date  { z-index: 2; }
+    #wrap-title {
+      z-index: 3;
+    }
+
+    #wrap-date {
+      z-index: 2;
+    }
 
     #title {
       width: 750px;
@@ -203,31 +239,103 @@
       transform: scale(1.05) rotate(3deg);
     }
 
+    /* New style for the scattered letters */
+    .letter-wrap {
+      position: absolute;
+      cursor: grab;
+      touch-action: none;
+      z-index: 5;
+      user-select: none;
+    }
+
+    .letter-wrap:active {
+      cursor: grabbing;
+    }
+
+    .letter-icon {
+      width: 50px;
+      height: 50px;
+      background-color: #ffffff;
+      /* This is the color of the letter icon */
+      -webkit-mask-image: url("about.png");
+      -webkit-mask-size: contain;
+      -webkit-mask-repeat: no-repeat;
+      mask-image: url("about.png");
+      mask-size: contain;
+      mask-repeat: no-repeat;
+      transition: transform 0.2s ease;
+    }
+
+    .letter-wrap:hover .letter-icon {
+      transform: scale(1.2) rotate(5deg);
+    }
+
     @keyframes fadeUp {
-      to { opacity: 1; transform: translateY(0); }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
-      p { font-size: 14px; }
+      p {
+        font-size: 14px;
+      }
 
-      #title { width: 90vw; height: 31vw; max-height: 260px; }
-      #date  { width: 68vw; height: 18vw; max-height: 110px; }
+      #title {
+        width: 90vw;
+        height: 31vw;
+        max-height: 260px;
+      }
 
-      .panel-content { font-size: 14px; }
-      .nav-icon { width: 28px; height: 28px; }
-      .nav-label { font-size: 9px; }
-      #nav { padding: 14px 16px; }
+      #date {
+        width: 68vw;
+        height: 18vw;
+        max-height: 110px;
+      }
+
+      .panel-content {
+        font-size: 14px;
+      }
+
+      .nav-icon {
+        width: 28px;
+        height: 28px;
+      }
+
+      .nav-label {
+        font-size: 9px;
+      }
+
+      #nav {
+        padding: 14px 16px;
+      }
     }
 
     @media (max-width: 480px) {
-      #title { width: 92vw; height: 32vw; }
-      #date  { width: 74vw; height: 19vw; }
-      .nav-icon { width: 22px; height: 22px; }
-      .nav-label { display: none; }
+      #title {
+        width: 92vw;
+        height: 32vw;
+      }
+
+      #date {
+        width: 74vw;
+        height: 19vw;
+      }
+
+      .nav-icon {
+        width: 22px;
+        height: 22px;
+      }
+
+      .nav-label {
+        display: none;
+      }
     }
   </style>
 </head>
+
 <body>
 
   <!-- NAV -->
@@ -270,22 +378,22 @@
   <div class="panel" id="panel-artists">
     <span class="panel-close">✕ close</span>
     <div class="panel-content">
-        <p>Izza Alyssa</p>
-        <p>Gabriella N. Baez</p>
-        <p>Denzel Boyd</p>
-        <p>Rebecca Cheng</p>
-        <p>Ellen Fabini</p>
-        <p>Amy Fang</p>
-        <p>Camille J. Gwise</p>
-        <p>Hana Jelovšek</p>
-        <p>David Wonsik Jung</p>
-        <p>Hasti Kasraei</p>
-        <p>Heejae Kim</p>
-        <p>Cierra Peters</p>
-        <p>Michael Stevens</p>
-        <p>Priscilla Young</p>
-        <p>Xiwen Zhang</p>
-        <p>Hongting Zhu</p>
+      <p>Izza Alyssa</p>
+      <p>Gabriella N. Baez</p>
+      <p>Denzel Boyd</p>
+      <p>Rebecca Cheng</p>
+      <p>Ellen Fabini</p>
+      <p>Amy Fang</p>
+      <p>Camille J. Gwise</p>
+      <p>Hana Jelovšek</p>
+      <p>David Wonsik Jung</p>
+      <p>Hasti Kasraei</p>
+      <p>Heejae Kim</p>
+      <p>Cierra Peters</p>
+      <p>Michael Stevens</p>
+      <p>Priscilla Young</p>
+      <p>Xiwen Zhang</p>
+      <p>Hongting Zhu</p>
     </div>
   </div>
 
@@ -298,12 +406,12 @@
         Yale School of Art<br>
         1156 Chapel Street, New Haven CT 06511<br>
         April 9 — 17, 2026<br>
-    </p><br><br>
-        <p><em>ENTER ENTER</em><br>
-            Nieuwe Herengracht 11A<br>
-            1011RK Amsterdam<br>
-            Dates Forthcoming
-        </p>
+      </p><br><br>
+      <p><em>ENTER ENTER</em><br>
+        Nieuwe Herengracht 11A<br>
+        1011RK Amsterdam<br>
+        Dates Forthcoming
+      </p>
     </div>
   </div>
 
@@ -314,7 +422,7 @@
       <p><em>Curatorial Team</em><br>
         Christoper Cole, Ellen Fabini, Amy Fang.
       </p><br>
-        <p><em>Identity Team</em><br>
+      <p><em>Identity Team</em><br>
         Denzel Boyd, Hasti Kasraei, Heejae Kim, Xiwen Zhang.
       </p><br>
       <p>
@@ -327,67 +435,125 @@
       </p>
     </div>
   </div>
-
-  <!-- STAGE -->
-  <div class="stage">
-    <div class="mask-wrap" id="wrap-title" data-base-x="0" data-base-y="-120">
-      <div class="mask-img" id="title" aria-label="Tender Hell title"></div>
-    </div>
-    <div class="mask-wrap" id="wrap-date" data-base-x="0" data-base-y="120">
+  <div class="stage" id="stage">
+    <div class="mask-wrap" id="wrap-date">
       <div class="mask-img" id="date" aria-label="Exhibition date"></div>
     </div>
   </div>
 
   <script>
-    const wraps     = document.querySelectorAll(".mask-wrap");
-    const maskImgs  = document.querySelectorAll(".mask-img");
-    const navItems  = document.querySelectorAll(".nav-item");
-    const panels    = document.querySelectorAll(".panel");
-    const navIcons  = document.querySelectorAll(".nav-icon");
-    const navLabels = document.querySelectorAll(".nav-label");
+   const stage = document.getElementById('stage');
+  const margin = 100;
 
-    // ── COLOR CYCLING ──
+  // ── 1. REFINED COORDINATE MAP (Based on title.png) ──
+  const layout = [
+    // T - Cursive Top & Stem
+    [2,0],[3,0],[4,0],[5,1],[6,2],[7,3],[7,4],[6,5],[5,5],[4,5],[3,5],[2,5],[1,6],[0,7],[0,8],[1,9],[2,9],
+    [4,6],[4,7],[4,8],[4,9],[4,10],[4,11],[4,12],[4,13], 
+    // e
+    [6,9],[7,8],[8,8],[9,9],[9,10],[8,11],[7,11],[6,10],[7,10],
+    // n
+    [11,9],[11,10],[11,11],[12,9],[13,10],[14,11],[14,10],[14,9],
+    // d
+    [17,7],[17,8],[17,9],[17,10],[17,11],[16,9],[16,11],[18,9],[18,11],[18,10],
+    // e (second)
+    [20,9],[21,8],[22,8],[23,9],[23,10],[22,11],[21,11],[20,10],
+    // r
+    [25,9],[25,10],[25,11],[26,9],[27,8],
+    
+    // HELL (Blocky Caps)
+    [6,15],[6,16],[6,17],[6,18],[6,19],[6,20],[7,17],[8,17],[9,15],[9,16],[9,17],[9,18],[9,19],[9,20],
+    // E
+    [11,15],[11,16],[11,17],[11,18],[11,19],[11,20],[12,15],[13,15],[12,17],[13,17],[12,20],[13,20],
+    // L
+    [15,15],[15,16],[15,17],[15,18],[15,19],[15,20],[16,20],[17,20],
+    // L
+    [19,15],[19,16],[19,17],[19,18],[19,19],[19,20],[20,20],[21,20],
+    
+    // Decorative Accents
+    [1,12],[2,13],[22,14],[23,15],[25,18],[26,19],[20,22],[21,23]
+  ];
 
+  // ── 2. AUTO-SCALING LOGIC ──
+  function renderTrace() {
+    // Clear existing (except date)
+    const existing = stage.querySelectorAll('.letter-unit');
+    existing.forEach(el => el.remove());
 
-    // ── NAV / PANEL LOGIC ──
-    function closeAll() {
-      panels.forEach(p => p.classList.remove("active"));
+    const maxX = Math.max(...layout.map(p => p[0]));
+    const maxY = Math.max(...layout.map(p => p[1]));
+
+    const availableW = window.innerWidth - (margin * 2);
+    const availableH = window.innerHeight - (margin * 2);
+
+    // Calculate scale factor (S) to fit the screen
+    const sX = availableW / maxX;
+    const sY = availableH / maxY;
+    const S = Math.min(sX, sY);
+
+    // Adjust icon size based on scale so they touch/overlap slightly
+    const iconSize = S * 1.2; 
+
+    // Center everything
+    const offsetX = (window.innerWidth - (maxX * S)) / 2;
+    const offsetY = (window.innerHeight - (maxY * S)) / 2;
+
+    layout.forEach(pos => {
+      const icon = document.createElement('div');
+      icon.className = 'letter-unit';
+      icon.style.width = `${iconSize}px`;
+      icon.style.height = `${iconSize}px`;
+      icon.style.left = (offsetX + pos[0] * S) + 'px';
+      icon.style.top = (offsetY + pos[1] * S) + 'px';
+      stage.appendChild(icon);
+      makeDraggable(icon);
+    });
+  }
+
+  // Initial render
+  renderTrace();
+
+  // Re-render on window resize to maintain 100px margin
+  window.addEventListener('resize', renderTrace);
+
+  // ── 3. DRAGGABLE ENGINE ──
+  function makeDraggable(el) {
+    let posX = 0, posY = 0, mouseX = 0, mouseY = 0;
+    el.onmousedown = dragStart;
+    el.ontouchstart = dragStart;
+
+    function dragStart(e) {
+      e.preventDefault();
+      const clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+      const clientY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+      mouseX = clientX;
+      mouseY = clientY;
+      document.onmouseup = dragEnd;
+      document.ontouchend = dragEnd;
+      document.onmousemove = dragMove;
+      document.ontouchmove = dragMove;
     }
 
-    navItems.forEach(item => {
-      item.addEventListener("click", () => {
-        const target  = document.getElementById(item.dataset.panel);
-        const isOpen  = target.classList.contains("active");
-        closeAll();
-        if (!isOpen) target.classList.add("active");
-      });
-    });
-
-    panels.forEach(panel => {
-      panel.addEventListener("click", e => { if (e.target === panel) closeAll(); });
-      panel.querySelector(".panel-close").addEventListener("click", e => {
-        e.stopPropagation();
-        closeAll();
-      });
-    });
-
-    // ── PARALLAX ──
-    function updateWrapPosition(wrap, mouseX = 0, mouseY = 0, speed = 1) {
-      const baseX = parseFloat(wrap.dataset.baseX || 0);
-      const baseY = parseFloat(wrap.dataset.baseY || 0);
-      wrap.style.transform = `translate(calc(-50% + ${baseX + mouseX * speed}px), calc(-50% + ${baseY + mouseY * speed}px))`;
+    function dragMove(e) {
+      const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+      const clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+      posX = mouseX - clientX;
+      posY = mouseY - clientY;
+      mouseX = clientX;
+      mouseY = clientY;
+      el.style.top = (el.offsetTop - posY) + "px";
+      el.style.left = (el.offsetLeft - posX) + "px";
+      if(el.id === 'wrap-date') el.style.transform = "none";
     }
 
-    wraps.forEach((wrap, i) => updateWrapPosition(wrap, 0, 0, i === 0 ? 1 : 0.6));
+    function dragEnd() {
+      document.onmouseup = null; document.onmousemove = null;
+      document.ontouchend = null; document.ontouchmove = null;
+    }
+  }
 
-    document.addEventListener("mousemove", e => {
-      const x = (e.clientX / window.innerWidth  - 0.5) * 20;
-      const y = (e.clientY / window.innerHeight - 0.5) * 20;
-      wraps.forEach((wrap, i) => {
-        if (wrap.dataset.dragging === "true") return;
-        updateWrapPosition(wrap, x, y, i === 0 ? 1 : 0.6);
-      });
-    });
+  makeDraggable(document.getElementById('wrap-date'));
   </script>
 </body>
+
 </html>
