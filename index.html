@@ -45,7 +45,8 @@
       justify-content: space-around;
       align-items: center;
       padding: 18px 40px;
-      z-index: 20;
+      /* Above .panel.active so icons stay hoverable while a panel is open */
+      z-index: 30;
     }
 
     .nav-item {
@@ -132,76 +133,6 @@
 
     .panel-close:hover { opacity: 1; }
 
-    /* ── STAGE ── */
-    .stage {
-      position: relative;
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    .mask-wrap {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      will-change: transform;
-      cursor: grab;
-      touch-action: none;
-      z-index: 2;
-    }
-
-    .mask-wrap.dragging { cursor: grabbing; }
-
-    .mask-img {
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeUp 1s ease forwards;
-      transition: transform 0.3s ease, background-color 0.8s ease;
-      background-color: #ffffff;
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: contain;
-      pointer-events: none;
-    }
-
-    #wrap-title { z-index: 3; }
-    #wrap-date  { z-index: 2; }
-
-    #title {
-      width: 750px;
-      height: 260px;
-      animation-delay: 0s;
-
-      -webkit-mask-image: url("title.png");
-      -webkit-mask-repeat: no-repeat;
-      -webkit-mask-position: center;
-      -webkit-mask-size: contain;
-
-      mask-image: url("title.png");
-      mask-repeat: no-repeat;
-      mask-position: center;
-      mask-size: contain;
-    }
-
-    #date {
-      width: 400px;
-      height: 110px;
-      animation-delay: 0.6s;
-
-      -webkit-mask-image: url("date.png");
-      -webkit-mask-repeat: no-repeat;
-      -webkit-mask-position: center;
-      -webkit-mask-size: contain;
-
-      mask-image: url("date.png");
-      mask-repeat: no-repeat;
-      mask-position: center;
-      mask-size: contain;
-    }
-
-    .mask-wrap:hover .mask-img {
-      transform: scale(1.05) rotate(3deg);
-    }
 
     @keyframes fadeUp {
       to { opacity: 1; transform: translateY(0); }
@@ -328,19 +259,26 @@
     </div>
   </div>
 
-  <!-- STAGE -->
-  <div class="stage">
-    <div class="mask-wrap" id="wrap-title" data-base-x="0" data-base-y="-120">
-      <div class="mask-img" id="title" aria-label="Tender Hell title"></div>
-    </div>
-    <div class="mask-wrap" id="wrap-date" data-base-x="0" data-base-y="120">
-      <div class="mask-img" id="date" aria-label="Exhibition date"></div>
+  <!-- main title -->
+  <div class="main">
+   
+    <div class="centerpiece"
+         style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 90vh;">
+      <img src="TenderHell-GIF_3.gif"
+           alt="Tender Hell"
+           style="width: 90vw; height: auto; max-width: 1280px; display: block; margin: 0; padding: 5em 0 0 0;">
+      <div class="location" style="text-align: center;">
+        <p>
+          <em>Green Hall Gallery</em> <br>
+         Yale School of Art <br>
+          1156 Chapel Street,
+           New Haven CT 06511<br>
+        </p>
+      </div>
     </div>
   </div>
 
   <script>
-    const wraps     = document.querySelectorAll(".mask-wrap");
-    const maskImgs  = document.querySelectorAll(".mask-img");
     const navItems  = document.querySelectorAll(".nav-item");
     const panels    = document.querySelectorAll(".panel");
     const navIcons  = document.querySelectorAll(".nav-icon");
@@ -350,7 +288,30 @@
 
 
     // ── NAV / PANEL LOGIC ──
+    const desktopMedia = window.matchMedia("(min-width: 769px)");
+    let hoverCloseTimer = null;
+
+    function isDesktopNav() {
+      return desktopMedia.matches;
+    }
+
+    function clearHoverCloseTimer() {
+      if (hoverCloseTimer !== null) {
+        clearTimeout(hoverCloseTimer);
+        hoverCloseTimer = null;
+      }
+    }
+
+    function scheduleHoverClose() {
+      clearHoverCloseTimer();
+      hoverCloseTimer = setTimeout(() => {
+        hoverCloseTimer = null;
+        closeAll();
+      }, 140);
+    }
+
     function closeAll() {
+      clearHoverCloseTimer();
       panels.forEach(p => p.classList.remove("active"));
     }
 
@@ -361,9 +322,30 @@
         closeAll();
         if (!isOpen) target.classList.add("active");
       });
+
+      item.addEventListener("mouseenter", () => {
+        if (!isDesktopNav()) return;
+        const target = document.getElementById(item.dataset.panel);
+        closeAll();
+        target.classList.add("active");
+      });
+
+      item.addEventListener("mouseleave", () => {
+        if (!isDesktopNav()) return;
+        scheduleHoverClose();
+      });
     });
 
     panels.forEach(panel => {
+      panel.addEventListener("mouseenter", () => {
+        if (!isDesktopNav()) return;
+        clearHoverCloseTimer();
+      });
+      panel.addEventListener("mouseleave", () => {
+        if (!isDesktopNav()) return;
+        scheduleHoverClose();
+      });
+
       panel.addEventListener("click", e => { if (e.target === panel) closeAll(); });
       panel.querySelector(".panel-close").addEventListener("click", e => {
         e.stopPropagation();
@@ -371,23 +353,7 @@
       });
     });
 
-    // ── PARALLAX ──
-    function updateWrapPosition(wrap, mouseX = 0, mouseY = 0, speed = 1) {
-      const baseX = parseFloat(wrap.dataset.baseX || 0);
-      const baseY = parseFloat(wrap.dataset.baseY || 0);
-      wrap.style.transform = `translate(calc(-50% + ${baseX + mouseX * speed}px), calc(-50% + ${baseY + mouseY * speed}px))`;
-    }
 
-    wraps.forEach((wrap, i) => updateWrapPosition(wrap, 0, 0, i === 0 ? 1 : 0.6));
-
-    document.addEventListener("mousemove", e => {
-      const x = (e.clientX / window.innerWidth  - 0.5) * 20;
-      const y = (e.clientY / window.innerHeight - 0.5) * 20;
-      wraps.forEach((wrap, i) => {
-        if (wrap.dataset.dragging === "true") return;
-        updateWrapPosition(wrap, x, y, i === 0 ? 1 : 0.6);
-      });
-    });
   </script>
 </body>
 </html>
