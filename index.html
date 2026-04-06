@@ -131,7 +131,22 @@
       transition: opacity 0.2s;
     }
 
+    .main-hero-gif {
+      display: block;
+      width: 90vw;
+      height: auto;
+      /* max-width: 1280px; */
+      margin: 0;
+      padding: 5em 0 0 0;
+    }
 
+    @media (min-width: 1021px) {
+      .main-hero-gif {
+        /* Match width at 1020px (90vw); do not grow past this on large screens */
+        width: 70vw;
+        max-width: 70vw;
+      }
+    }
 
     @keyframes fadeUp {
       to { opacity: 1; transform: translateY(0); }
@@ -273,9 +288,9 @@
    
     <div class="centerpiece"
          style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 90vh;">
-      <img src="TenderHell-GIF_3.gif"
-           alt="Tender Hell"
-           style="width: 90vw; height: auto; max-width: 1280px; display: block; margin: 0; padding: 5em 0 0 0;">
+      <img class="main-hero-gif"
+           src="TenderHell-GIF_3.gif"
+           alt="Tender Hell">
       <div class="location" style="text-align: center;">
         <p>
           <em>Green Hall Gallery</em> <br>
