@@ -126,12 +126,11 @@
       font-size: 13px;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      opacity: 1;
+      opacity: 0;
       cursor: pointer;
       transition: opacity 0.2s;
     }
 
-    .panel-close:hover { opacity: 1; }
 
 
     @keyframes fadeUp {
@@ -140,10 +139,24 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
+      body { margin: 2em; }
       p { font-size: 14px; }
 
       #title { width: 90vw; height: 31vw; max-height: 260px; }
       #date  { width: 68vw; height: 18vw; max-height: 110px; }
+
+      .panel {
+        padding-bottom: max(72px, calc(env(safe-area-inset-bottom, 0px) + 56px));
+      }
+
+      .panel-close {
+        opacity: 1;
+        top: auto;
+        right: auto;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: max(16px, calc(env(safe-area-inset-bottom, 20px) + 12px));
+      }
 
       .panel-content { font-size: 14px; }
       .nav-icon { width: 28px; height: 28px; }
